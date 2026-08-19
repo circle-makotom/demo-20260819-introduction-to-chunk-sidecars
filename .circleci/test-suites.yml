@@ -1,0 +1,24 @@
+name: unit tests
+
+discover: find spec -type f -name '*_spec.rb'
+run: bundle exec rspec --format RspecJunitFormatter --out "<< outputs.junit >>" << test.atoms >>
+analysis: |
+  unset CI
+  COVERAGE_OUTPUT="<< outputs.lcov >>" bundle exec rspec << test.atoms >>
+
+outputs:
+  junit: test-reports/rspec/junit.xml
+  lcov: coverage/lcov.info
+
+options:
+  test-impact-analysis: true
+  dynamic-test-splitting: true
+  full-test-run-paths:
+    - Gemfile
+    - Gemfile.lock
+    - .circleci/*.yml
+    - config/application.rb
+    - config/environments/test.rb
+    - spec/spec_helper.rb
+    - spec/rails_helper.rb
+    - agent-coding-prompt.md

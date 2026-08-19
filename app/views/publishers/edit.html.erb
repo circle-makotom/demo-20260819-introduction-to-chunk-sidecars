@@ -1,0 +1,12 @@
+<% content_for :title, "Editing publisher" %>
+
+<h1>Editing publisher</h1>
+
+<%= render "form", publisher: @publisher %>
+
+<br>
+
+<div>
+  <%= link_to "Show this publisher", @publisher %> |
+  <%= link_to "Back to publishers", publishers_path %>
+</div>

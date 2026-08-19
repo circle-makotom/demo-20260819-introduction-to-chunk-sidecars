@@ -1,0 +1,14 @@
+require 'rails_helper'
+
+# Auto-generated random-input case 001 of 100.
+# Target: Publisher#name presence validation — deliberately minimal coverage
+# (touches only app/models/publisher.rb + the factory), so CircleCI Test
+# Impact Analysis skips these cases unless the Publisher model itself changes.
+# Independent of Author: editing publisher.rb never selects Author's cases.
+RSpec.describe Publisher, type: :model do
+  it "is valid with a random name (case 001)" do
+    digest = 'seed-publisher-001'
+    30_000_000.times { digest = Digest::SHA256.hexdigest(digest) }
+    expect(build(:publisher, name: "Renner, Haley and Metz fa2aad")).to be_valid
+  end
+end

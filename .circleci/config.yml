@@ -1,0 +1,47 @@
+version: 2.1
+
+jobs:
+  resolve-dependencies:
+    docker:
+      - image: ruby
+    resource_class: large.gen2
+    steps:
+      - checkout
+      - run:
+          command: bundle install
+          environment:
+            BUNDLE_PATH: vendor/bundle
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  rspec:
+    docker:
+      - image: ruby
+    resource_class: medium.gen2
+    parallelism: 5
+    steps:
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: Run RSpec
+          command: circleci run testsuite "unit tests" --select-tests=impacted
+          environment:
+            BUNDLE_PATH: vendor/bundle
+
+      - store_test_results:
+          path: test-reports/rspec
+      - store_artifacts:
+          path: test-reports/rspec
+      - store_artifacts:
+          path: coverage/lcov.info
+
+workflows:
+  run:
+    jobs:
+      - resolve-dependencies
+      - rspec:
+          requires:
+            - resolve-dependencies
